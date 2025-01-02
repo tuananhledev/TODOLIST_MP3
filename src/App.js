@@ -1,7 +1,5 @@
-import React from 'react'
-import { useState } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import React, { useState } from 'react'
+import { toast, ToastContainer } from 'react-toastify'
 
 const App = () => {
   const [work, setWork] = useState('')
@@ -9,30 +7,32 @@ const App = () => {
 
   const handleAdd = () => {
     if (todos?.some(item => item.id === work?.replace(/\s/g, ''))) {
-      toast.warn('Công việc đã được thêm vào trước đó')
+      toast.warn('Công việc đã tồn tại!!!')
     } else {
       setTodos(prev => [...prev, { id: work?.replace(/\s/g, ''), job: work }])
       setWork('')
+      toast.success('Thêm thành công')
     }
   }
 
   const handleDelete = (id) => {
     setTodos(prev => prev.filter(item => item.id !== id))
+    toast.success('Xóa thành công')
   }
 
   return (
     <>
-      <div className='flex flex-col h-screen gap-8 justify-center items-center border border-red-500'>
+      <div className='flex flex-col h-screen gap-8 border border-red-500 items-center justify-center'>
         <div className='flex gap-8'>
           <input
             type="text"
-            className='outline-none border border-blue-600 px-4 py-2 w-[400px]'
+            className='border border-blue-600 px-4 py-2 w-[400px]'
             value={work}
             onChange={e => setWork(e.target.value)}
           />
           <button
             type='button'
-            className='outline-none px-4 py-2 bg-blue-500 rounded-md text-white'
+            className='bg-blue-600 text-white rounded-md px-4 py-2'
             onClick={handleAdd}
           >
             Add
@@ -41,12 +41,12 @@ const App = () => {
         <div>
           <h3 className='font-bold text-xl'>Content:</h3>
           <ul>
-            {todos?.map((item) => {
+            {todos?.map(item => {
               return (
-                <li key={item.id} className='flex gap-10 items-center'>
-                  <span className='my-2'>{item.job}</span>
-                  <span onClick={() => handleDelete(item.id)} className='my-2 cursor-pointer p-2'>X</span>
-                </li>
+                <div className='flex gap-10 p-2'>
+                  <li key={item.id}>{item.job}</li>
+                  <span className='cursor-pointer' onClick={() => handleDelete(item.id)}>X</span>
+                </div>
               )
             })}
           </ul>
