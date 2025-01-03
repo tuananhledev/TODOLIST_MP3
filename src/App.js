@@ -1,56 +1,23 @@
 import React, { useState } from 'react'
-import { toast, ToastContainer } from 'react-toastify'
+import { useSelector, useDispatch } from 'react-redux'
+import { ToastContainer } from 'react-toastify'
+import { Home, Login, Public } from './containers/public'
+import { Route, Routes } from 'react-router-dom'
+import path from './ultis/path'
 
 const App = () => {
-  const [work, setWork] = useState('')
-  const [todos, setTodos] = useState([])
-
-  const handleAdd = () => {
-    if (todos?.some(item => item.id === work?.replace(/\s/g, ''))) {
-      toast.warn('Công việc đã tồn tại!!!')
-    } else {
-      setTodos(prev => [...prev, { id: work?.replace(/\s/g, ''), job: work }])
-      setWork('')
-      toast.success('Thêm thành công')
-    }
-  }
-
-  const handleDelete = (id) => {
-    setTodos(prev => prev.filter(item => item.id !== id))
-    toast.success('Xóa thành công')
-  }
+  const { test } = useSelector(state => state.app)
+  console.log(test);
 
   return (
     <>
-      <div className='flex flex-col h-screen gap-8 border border-red-500 items-center justify-center'>
-        <div className='flex gap-8'>
-          <input
-            type="text"
-            className='border border-blue-600 px-4 py-2 w-[400px]'
-            value={work}
-            onChange={e => setWork(e.target.value)}
-          />
-          <button
-            type='button'
-            className='bg-blue-600 text-white rounded-md px-4 py-2'
-            onClick={handleAdd}
-          >
-            Add
-          </button>
-        </div>
-        <div>
-          <h3 className='font-bold text-xl'>Content:</h3>
-          <ul>
-            {todos?.map(item => {
-              return (
-                <div className='flex gap-10 p-2'>
-                  <li key={item.id}>{item.job}</li>
-                  <span className='cursor-pointer' onClick={() => handleDelete(item.id)}>X</span>
-                </div>
-              )
-            })}
-          </ul>
-        </div>
+      <div className=''>
+        <Routes>
+          <Route path={path.PUBLIC} element={<Public />}>
+            <Route path={path.HOME} element={<Home />} />
+            <Route path={path.LOGIN} element={<Login />} />
+          </Route>
+        </Routes>
       </div>
       <ToastContainer
         position="top-right"
